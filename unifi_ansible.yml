@@ -1,0 +1,55 @@
+---
+- hosts: all
+  tasks:
+    - name: Updating all repo and cache
+      apt: 
+        update_cache: yes 
+        force_apt_get: yes
+        cache_valid_time: 3600
+      become: true
+    - name: Update all packages to their latest version
+      apt: 
+        name: "*"
+        state: latest
+      become: true
+    - name: installing openjdk and rng-tools
+      apt:
+        name: 
+          - openjdk-8-jre-headless
+          - rng-tools
+        state: present
+        update_cache: true
+      become: true
+    - name: Enabling HRNGDEVICE
+      become: yes
+      become_user: root
+      replace: 
+        path: /etc/default/rng-tools
+        regexp: '(^#HRNGDEVICE=\/dev\/hwrng)(.*)$'
+        replace: 'HRNGDEVICE=/dev/hwrng'
+        backup: yes
+    - name: restarting rng-tools
+      service:
+        state: restarted
+        name: rng-tools
+        use: service
+      become: true
+    - name: doing something
+      shell: "echo 'deb https://www.ui.com/downloads/unifi/debian/ stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
+"
+    - name: getting repo key
+      shell: " wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg"
+      become: true
+    - name: update again
+      apt: 
+        update_cache: yes 
+        force_apt_get: yes
+        cache_valid_time: 3600
+      become: true
+    - name: installing unifi
+      apt:
+        name: 
+          - unifi
+        state: present
+        update_cache: true
+      become: true
