@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+    - name: uninstalling unifi,openjdk and rng-tools
+      apt:
+        name: 
+          - unifi
+          - openjdk-8-jre-headless
+          - rng-tools
+        state: absent
+        purge: yes
+        update_cache: true
+      become: true
+    - name: removing unifi gpg
+      file: 
+        path: /etc/apt/trusted.gpg.d/unifi-repo.gpg
+        state: absent
+      become: true
+    - name: removing apt source
+      file: 
+        path: /etc/apt/sources.list.d/100-ubnt-unifi.list
+        state: absent
+      become: true
