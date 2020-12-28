@@ -1,6 +1,8 @@
-<div style="text-align:center"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg" /></div>
+<p align="center">
+  <img width="460" height="300" src="https://upload.wikimedia.org/wikipedia/commons/2/24/Ansible_logo.svg">
+</p>
+----------
 
-# Ansible-Playbooks
 ## Install Scripts
 1. Unifi - Linux
 
